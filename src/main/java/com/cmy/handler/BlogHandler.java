@@ -1,10 +1,9 @@
 package com.cmy.handler;
 
+import ch.qos.logback.core.pattern.FormatInfo;
 import cn.hutool.core.util.NumberUtil;
 import com.cmy.config.ArgsConfig;
 import com.cmy.pojo.User;
-import com.cmy.utils.FilePropertyUtil;
-import com.cmy.utils.MyXmlUtils;
 import com.cmy.utils.UploadUtil;
 import com.cmy.utils.UrlRecordParseUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -30,34 +29,63 @@ import java.util.Map;
 @Slf4j
 public class BlogHandler {
 
-    public final static User user = new User("https://rpc.cnblogs.com/metaweblog/void-cmy","VoidCM","2F7F76537B7CEBBB4A869D051FA795DEAD3941172C6AD44213E291806B7D3ACB");
+    public final static User user = new User();
 
     public static Map<String,String> uploadMap = new HashMap<>();
 
 
     public static void doHandler(ArgsConfig argsConfig){
-        //String originFile = argsConfig.getOriginFile();
-        //String username = argsConfig.getUsername();
-        //String secret = argsConfig.getSecret();
-        //user.setUsername(username);
-        //user.setToken(secret);
-        String originFile = "F:\\CmyJournal\\codingLife\\2023-11-23\\hell.md";
+        String metaWeblogUrl = argsConfig.getMetaWeblogUrl();
+        String originFile = argsConfig.getOriginFile();
+        String username = argsConfig.getUsername();
+        String secret = argsConfig.getSecret();
+        boolean publish = "1".equals(argsConfig.getPublish());
+        //String categories = argsConfig.getCategories();//categories在博客中调
 
-        user.setUrl("https://rpc.cnblogs.com/metaweblog/void-cmy");
+        //参数校验
+        if (StringUtils.isBlank(metaWeblogUrl)){
+            log.error("url is null");
+            return;
+        }
+
+        if (StringUtils.isBlank(originFile)){
+            log.error("input file is null");
+            return;
+        }else {
+            if (!"md".equals(FilenameUtils.getExtension(originFile))) {
+                log.error("input file is not markdown file");
+                return;
+            }
+        }
+
+        if (StringUtils.isBlank(username)){
+            log.error("username is null");
+            return;
+        }
+
+        if (StringUtils.isBlank(secret)){
+            log.error("token is null");
+            return;
+        }
+
+        user.setUrl(metaWeblogUrl);
+        user.setUsername(username);
+        user.setToken(secret);
+
 
         //首先判断Blog的文件夹是否存在
         String fullPath = FilenameUtils.getFullPath(originFile);
         String baseName = FilenameUtils.getBaseName(originFile);
         String dataPath = fullPath + baseName + ".assets"+"\\blogData";
         String urlRecordMapPath = dataPath+"\\urlRecords.txt";
-        log.info("判断文件夹:{}是否存在", dataPath);
+        log.info("determine whether the folder: {} exists", dataPath);
         File file = new File(dataPath);
         if (!file.exists()){
-            log.info("...文件不存在,开始创建文件夹");
+            log.info("...the folder does not exist, start creating folder");
             boolean mkdirs = file.mkdirs();
-            log.info("...文件创建{}",mkdirs?"成功":"失败");
+            log.info("...the folder create {}",mkdirs?"success":"failed");
         }else {
-            log.info("...文件夹已存在");
+            log.info("...the folder has already existed");
             //读取dataPath+"\\urlRecords.txt"
             if (Files.exists(Paths.get(urlRecordMapPath))){
                 uploadMap = UrlRecordParseUtil.parseUrlRecords(urlRecordMapPath);
@@ -72,7 +100,7 @@ public class BlogHandler {
                 boolean exists = UploadUtil.judgeWhetherBlogPostExistsOrNot(markdownPostID);
                 //存在->修改 有可能需要处理多媒体
                 if (exists){
-                    UploadUtil.updateBlog(originFile,Collections.singletonList("[Markdown]"),markdownPostID,false);
+                    UploadUtil.updateBlog(originFile,Collections.singletonList("[Markdown]"),markdownPostID,publish);
                     //将urlRecords 覆写
                     UrlRecordParseUtil.saveUrlRecords(urlRecordMapPath,uploadMap);
                     return;

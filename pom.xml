@@ -7,7 +7,7 @@
   <version>1.0.0</version>
   <packaging>jar</packaging>
 
-  <name>tangram</name>
+  <name>blog-manager</name>
   <!--<url>https://gitee.com/cmyttxshhxx/tangram</url>-->
 
   <developers>
@@ -81,10 +81,17 @@
       <!--lombok的任务在编译时结束 无需打入jar-->
       <scope>provided</scope>
     </dependency>
+    <dependency>
+      <groupId>ch.qos.logback</groupId>
+      <artifactId>logback-classic</artifactId>
+      <version>1.2.3</version>
+    </dependency>
   </dependencies>
+
 
   <!-- 打包 -->
   <build>
+    <finalName>blogManager</finalName>
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -104,6 +111,44 @@
         <configuration>
           <skip>true</skip>
         </configuration>
+      </plugin>
+      <!--<plugin>-->
+      <!--  <groupId>org.apache.maven.plugins</groupId>-->
+      <!--  <artifactId>maven-jar-plugin</artifactId>-->
+      <!--  <version>3.2.0</version>-->
+      <!--  <configuration>-->
+      <!--    <archive>-->
+      <!--      <manifest>-->
+      <!--        <addClasspath>true</addClasspath>-->
+      <!--        <classpathPrefix>lib/</classpathPrefix>-->
+      <!--        <mainClass>com.cmy.BlogManager</mainClass>-->
+      <!--      </manifest>-->
+      <!--    </archive>-->
+      <!--  </configuration>-->
+      <!--</plugin>-->
+      <plugin>
+        <artifactId>maven-assembly-plugin</artifactId>
+        <configuration>
+          <archive>
+            <manifest>
+              <mainClass>com.cmy.BlogManager</mainClass>
+            </manifest>
+          </archive>
+          <descriptorRefs>
+            <descriptorRef>
+              jar-with-dependencies
+            </descriptorRef>
+          </descriptorRefs>
+        </configuration>
+        <executions>
+          <execution>
+            <id>make-assembly</id>
+            <phase>package</phase>
+            <goals>
+              <goal>single</goal>
+            </goals>
+          </execution>
+        </executions>
       </plugin>
     </plugins>
   </build>

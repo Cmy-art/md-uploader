@@ -24,7 +24,7 @@ public class UrlRecordParseUtil {
             String value = s.substring(i+1);
             map.put(key,value);
         }
-        log.debug("解析urlRecords:\n{}",map);
+        //log.debug("解析urlRecords:\n{}",map);
         return map;
     }
 
@@ -35,7 +35,7 @@ public class UrlRecordParseUtil {
         urlRecordsMap.forEach((key,value)->{
             lines.add(key+":"+value);
         });
-        log.debug("保存urlRecords:\n{}",lines);
+        //log.debug("保存urlRecords:\n{}",lines);
         FileUtil.writeLines(lines,file,StandardCharsets.UTF_8);
     }
 

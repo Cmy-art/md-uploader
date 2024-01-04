@@ -54,17 +54,13 @@ public class UploadUtil {
             XmlRes blogUploadedResXml = MyXmlUtils.getBlogUploadedResXml(responseXml);
             if (blogUploadedResXml.getSuccess()){
                 String postId = blogUploadedResXml.getData();
-                String laterMarkdown = fullPath+baseName+".assets/blogData/" + postId +".md";
+                //String laterMarkdown = fullPath+baseName+".assets/blogData/" + postId +".md";
                 //将markdown 写入./{filename}.assets/blogData
-                log.info("will generate markdown :{} in path : {}",laterMarkdown,fullPath);
-                File file = FileUtil.writeString(updateMarkdown, laterMarkdown, StandardCharsets.UTF_8);
-                if (file.exists()){
-                    //用来标识文档是否上传过
-                    BlogHandler.uploadMap.put(fileName,postId);
-                    log.info("associate blog :{} and postid :{}",absolutePath,postId);
-                }
-            }else {
-                log.info("upload failed!!!!!!!!!!!");
+                //log.info("will generate markdown :{} in path : {}",laterMarkdown,fullPath);
+                //File file = FileUtil.writeString(updateMarkdown, laterMarkdown, StandardCharsets.UTF_8);
+                //if (file.exists()){
+                //用来标识文档是否上传过
+                BlogHandler.uploadMap.put(fileName,postId);
             }
         } catch (IORuntimeException e) {
             log.error(ThrowableUtil.getStackTrace(e));
@@ -116,7 +112,7 @@ public class UploadUtil {
         Document blogUpdateResXml = MyXmlUtils.generateUpdateBlogXml(blog);
         String responseXml = HttpUtil.post(BlogHandler.user.getUrl(), MyXmlUtils.transferToXmlStr(blogUpdateResXml));
         XmlRes blogUploadedResXml = MyXmlUtils.getBlogUpdateResXml(responseXml);
-        log.info("update blog:{}-{}",blog.getBlogId(),(blogUploadedResXml.getSuccess()&&"1".equals(blogUploadedResXml.getData()))?"success":"failed");
+        log.info("update blog-[{}] {}",blog.getBlogId(),(blogUploadedResXml.getSuccess()&&"1".equals(blogUploadedResXml.getData()))?"success":"failed");
     }
 
     public static void main(String[] args) {

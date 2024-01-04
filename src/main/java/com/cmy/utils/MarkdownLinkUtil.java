@@ -11,9 +11,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.w3c.dom.Document;
-
-import java.io.File;
-import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -49,19 +46,19 @@ public class MarkdownLinkUtil {
                     String lastUploadUrl = BlogHandler.uploadMap.get(originPath);
                     if (StringUtils.isNotBlank(lastUploadUrl)) {
                         //通过originPath找到了上一次上传之后的路径说明不用上送该路径,直接使用上一次的路径
-                        log.debug("use last uploadPath:{}",lastUploadUrl);
+                        log.info("use last uploadPath:{}",lastUploadUrl);
                         updatePath = lastUploadUrl;
                     }else {
                         //上传图片 获得返回的图片url
                         updatePath = uploadMedia(parentPath, originPath);
                         BlogHandler.uploadMap.put(originPath,updatePath);
-                        log.debug("upload media uploadPath:{}",updatePath);
+                        log.info("upload media uploadPath:{}",updatePath);
                     }
 
                     if (StringUtils.isNotBlank(updatePath)){
                         matcher.appendReplacement(updateMarkdown,"![" + matcher.group(1) + "](" + updatePath + ")");
                     }else {
-                        log.error("image upload failed,use origin image");
+                        log.info("image upload failed,use origin image");
                     }
                 }
             }

@@ -18,6 +18,9 @@ import org.kohsuke.args4j.spi.BooleanOptionHandler;
 @NoArgsConstructor
 public class ArgsConfig {
 
+    @Option(name = "-m",aliases = {"--metaWeblogUrl"},metaVar = "the metaWeblog file",usage = "MetaWeblog访问地址")
+    private String metaWeblogUrl;
+
     @Option(name = "-o",aliases = {"--originFile"},metaVar = "the origin file",usage = "要上传的markdown文件")
     private String originFile;
 
@@ -26,6 +29,12 @@ public class ArgsConfig {
 
     @Option(name = "-s",aliases = {"--secret"},metaVar = "the metaWebLog token",usage = "MetaWeblog访问令牌")
     private String secret;
+
+    //@Option(name = "-c",aliases = {"--categories"},metaVar = "the blog categories",usage = "博客分类,默认MarkDown")
+    //private String categories;
+
+    @Option(name = "-p",aliases = {"--publish"},metaVar = "publish or not", usage = "是否发布,0:不发布,1:发布")
+    private String publish;
 
     @Option (name="-h", aliases = {"-?","--help"}, metaVar = "show help info", usage="帮助信息", handler = BooleanOptionHandler.class, help = true)
     public boolean help;

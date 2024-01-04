@@ -188,7 +188,7 @@ public class MyXmlUtils {
     public static String transferToXmlStr(Document document){
 
         String str = XmlUtil.toStr(document, true);
-        log.debug("\nrequest:\n{}",str);
+        //log.debug("\nrequest:\n{}",str);
         return str;
     }
 
@@ -206,8 +206,8 @@ public class MyXmlUtils {
         xmlRes.setMsg("success");
 
         Document document = XmlUtil.readXML(xml);
-        String str = XmlUtil.toStr(document);
-        log.info("\nres:\n" + "{}",str);
+        //String str = XmlUtil.toStr(document);
+        //log.info("\nres:\n" + "{}",str);
 
 
         //获取faultCode
@@ -248,7 +248,12 @@ public class MyXmlUtils {
         Document document = XmlUtil.readXML(responseXml);
         String str = XmlUtil.toStr(document);
         XmlRes xmlRes = parseXmlRes(str, "/methodResponse/params[param/value/string/text()]");
-        log.info("xmlRes:{}", xmlRes);
+        //log.info("xmlRes:{}", xmlRes);
+        if (xmlRes.getSuccess()) {
+            log.info("upload success,the postId is : {}",xmlRes.getData());
+        }else {
+            log.error("upload failed,the faultCode is : {},the reason maybe : {}",xmlRes.getCode(),xmlRes.getData());
+        }
         return xmlRes;
     }
 

@@ -74,7 +74,7 @@ release:https://github.com/Cmy-art/md-uploader/releases/tag/V1.0.0
 
 ## 注意事项
 
-- 该工具基于Java,如果您的电脑存在Java环境(配置了JAVA_HOME)就会默认使用您自己的Jre,否则会直接使用release吧中的jre
+- 该工具基于Java,如果您的电脑存在Java环境(配置了JAVA_HOME)就会默认使用您自己的Jre,否则会直接使用release包中的jre
 
 - 文档移动位置
 

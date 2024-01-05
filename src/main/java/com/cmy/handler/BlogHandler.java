@@ -108,7 +108,7 @@ public class BlogHandler {
             }
         }
         //以下都是博文不存在需要上传markdown的情况,同时需要处理多媒体
-        UploadUtil.uploadMarkDown(originFile,Collections.singletonList("[Markdown]"),false);
+        UploadUtil.uploadMarkDown(originFile,Collections.singletonList("[Markdown]"),publish);
         //将urlRecords 覆写
         UrlRecordParseUtil.saveUrlRecords(urlRecordMapPath,uploadMap);
     }

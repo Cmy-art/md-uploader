@@ -5,14 +5,13 @@ import cn.hutool.core.io.IORuntimeException;
 import cn.hutool.http.HttpUtil;
 import com.cmy.handler.BlogHandler;
 import com.cmy.pojo.Blog;
+import com.cmy.pojo.ExistenceDTO;
 import com.cmy.pojo.XmlRes;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.w3c.dom.Document;
 
-import java.io.File;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Paths;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
@@ -73,7 +72,7 @@ public class UploadUtil {
      * @param postId 帖子ID
      * @return boolean
      */
-    public static boolean judgeWhetherBlogPostExistsOrNot(String postId){
+    public static ExistenceDTO judgeWhetherBlogPostExistsOrNot(String postId){
         Blog blog = new Blog();
         blog.setBlogId(postId);
         blog.setUsername(BlogHandler.user.getUsername());
@@ -91,8 +90,9 @@ public class UploadUtil {
      * @param categories     分类
      * @param markdownPostID 帖子ID
      * @param publish        是否发布
+     * @param remoteName
      */
-    public static void updateBlog(String originFile, List<String> categories, String markdownPostID, boolean publish) {
+    public static void updateBlog(String originFile, List<String> categories, String markdownPostID, boolean publish, String remoteName) {
         String fullPath = FilenameUtils.getFullPath(originFile);
         String fileName = FilenameUtils.getName(originFile);
         String markdown = FileUtil.readUtf8String(originFile);
@@ -105,7 +105,7 @@ public class UploadUtil {
         blog.setUsername(BlogHandler.user.getUsername());
         blog.setToken(BlogHandler.user.getToken());
         String baseName = FilenameUtils.getBaseName(fileName);
-        blog.setTitle(baseName);
+        blog.setTitle(StringUtils.isNotBlank(remoteName)?remoteName:baseName);
         blog.setContent(updateMarkdown);
         blog.setCategories(categories);
         blog.setPublish(publish);

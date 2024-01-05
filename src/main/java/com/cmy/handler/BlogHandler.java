@@ -1,8 +1,10 @@
 package com.cmy.handler;
 
 import ch.qos.logback.core.pattern.FormatInfo;
+import cn.hutool.core.util.BooleanUtil;
 import cn.hutool.core.util.NumberUtil;
 import com.cmy.config.ArgsConfig;
+import com.cmy.pojo.ExistenceDTO;
 import com.cmy.pojo.User;
 import com.cmy.utils.UploadUtil;
 import com.cmy.utils.UrlRecordParseUtil;
@@ -97,10 +99,12 @@ public class BlogHandler {
         if (StringUtils.isNotBlank(markdownPostID)){//文档被标记过 说明上传过
             if (NumberUtil.isNumber(markdownPostID)){//如果是数字
                 //需要请求 判断文件是否存在
-                boolean exists = UploadUtil.judgeWhetherBlogPostExistsOrNot(markdownPostID);
+                ExistenceDTO existenceDTO = UploadUtil.judgeWhetherBlogPostExistsOrNot(markdownPostID);
+                boolean exists = BooleanUtil.isTrue(existenceDTO.getExist());
                 //存在->修改 有可能需要处理多媒体
                 if (exists){
-                    UploadUtil.updateBlog(originFile,Collections.singletonList("[Markdown]"),markdownPostID,publish);
+                    String remoteName = existenceDTO.getRemoteName();
+                    UploadUtil.updateBlog(originFile,Collections.singletonList("[Markdown]"),markdownPostID,publish,remoteName);
                     //将urlRecords 覆写
                     UrlRecordParseUtil.saveUrlRecords(urlRecordMapPath,uploadMap);
                     return;

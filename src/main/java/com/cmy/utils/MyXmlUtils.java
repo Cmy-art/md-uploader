@@ -284,11 +284,18 @@ public class MyXmlUtils {
      * @param responseXml
      * @return
      */
-    public static boolean existenceDetermination(String responseXml){
+    public static ExistenceDTO existenceDetermination(String responseXml){
+        ExistenceDTO existenceDTO = new ExistenceDTO();
         Document document = XmlUtil.readXML(responseXml);
         String str = XmlUtil.toStr(document);
-        XmlRes xmlRes = parseXmlRes(str, "/methodResponse/params/param/value/struct/member[name='postid']/value/i4/text()");
-        return StringUtils.isNotBlank(xmlRes.getData());
+        XmlRes postIdXmlRes = parseXmlRes(str, "/methodResponse/params/param/value/struct/member[name='postid']/value/i4/text()");
+        XmlRes titleXmlRes = parseXmlRes(str, "/methodResponse/params/param/value/struct/member[name='title']/value/string/text()");
+        String postId = postIdXmlRes.getData();
+        String title = titleXmlRes.getData();
+        existenceDTO.setPostId(postId);
+        existenceDTO.setRemoteName(title);
+        existenceDTO.setExist(StringUtils.isNotBlank(postId));
+        return existenceDTO;
     }
 
     /**
@@ -303,63 +310,6 @@ public class MyXmlUtils {
         XmlRes xmlRes = parseXmlRes(str, "/methodResponse/params/param/value/struct/member[name='url']/value/string/text()");
         return xmlRes.getData();
     }
-
-
-    public static void main(String[] args) {
-        String res = "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n" +
-                "<methodResponse>\n" +
-                "    <fault>\n" +
-                "        <value>\n" +
-                "            <struct>\n" +
-                "                <member>\n" +
-                "                    <name>faultCode</name>\n" +
-                "                    <value>\n" +
-                "                        <int>3</int>\n" +
-                "                    </value>\n" +
-                "                </member>\n" +
-                "                <member>\n" +
-                "                    <name>faultString</name>\n" +
-                "                    <value>\n" +
-                "                        <string>参数有误, 缺失部分参数</string>\n" +
-                "                    </value>\n" +
-                "                </member>\n" +
-                "            </struct>\n" +
-                "        </value>\n" +
-                "    </fault>\n" +
-                "</methodResponse>";
-        String res2 = "<methodResponse>\n" +
-                "         <params>\n" +
-                "             <param>\n" +
-                "                 <value>\n" +
-                "                     <string>17862417</string>\n" +
-                "                 </value>\n" +
-                "             </param>\n" +
-                "         </params>\n" +
-                "     </methodResponse>";
-
-        String res3 = "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n" +
-                "<methodResponse>\n" +
-                "    <params>\n" +
-                "        <param>\n" +
-                "            <value>\n" +
-                "                <struct>\n" +
-                "                    <member>\n" +
-                "                        <name>url</name>\n" +
-                "                        <value>\n" +
-                "                            <string>https://img2023.cnblogs.com/blog/2320867/202311/2320867-20231129114357006-561552390.jpg</string>\n" +
-                "                        </value>\n" +
-                "                    </member>\n" +
-                "                </struct>\n" +
-                "            </value>\n" +
-                "        </param>\n" +
-                "    </params>\n" +
-                "</methodResponse>";
-
-        existenceDetermination(res3);
-    }
-
-
-
 
 }
 

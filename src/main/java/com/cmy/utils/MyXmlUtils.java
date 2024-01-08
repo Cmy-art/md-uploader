@@ -150,6 +150,9 @@ public class MyXmlUtils {
         addMember(methodCall,"description",blog.getContent());
         addMember(methodCall,"title",blog.getTitle());
         addMember(methodCall,"categories",blog.getCategories());
+        addMember(methodCall,"mt_text_more",blog.getMtTextMore());
+        addMember(methodCall,"mt_excerpt",blog.getMtExcerpt());
+        addMember(methodCall,"mt_keywords",blog.getMtKeywords());
 
         addParam(methodCall,blog.getPublish());
         return methodCall;
@@ -290,11 +293,20 @@ public class MyXmlUtils {
         String str = XmlUtil.toStr(document);
         XmlRes postIdXmlRes = parseXmlRes(str, "/methodResponse/params/param/value/struct/member[name='postid']/value/i4/text()");
         XmlRes titleXmlRes = parseXmlRes(str, "/methodResponse/params/param/value/struct/member[name='title']/value/string/text()");
+        XmlRes textMoreXmlRes = parseXmlRes(str, "/methodResponse/params/param/value/struct/member[name='mt_text_more']/value/string/text()");
+        XmlRes excerptXmlRes = parseXmlRes(str, "/methodResponse/params/param/value/struct/member[name='mt_excerpt']/value/string/text()");
+        XmlRes keywordsXmlRes = parseXmlRes(str, "/methodResponse/params/param/value/struct/member[name='mt_keywords']/value/string/text()");
         String postId = postIdXmlRes.getData();
         String title = titleXmlRes.getData();
+        String textMore = textMoreXmlRes.getData();
+        String excerpt = excerptXmlRes.getData();
+        String keywords = keywordsXmlRes.getData();
         existenceDTO.setPostId(postId);
         existenceDTO.setRemoteName(title);
         existenceDTO.setExist(StringUtils.isNotBlank(postId));
+        existenceDTO.setMtTextMore(textMore);
+        existenceDTO.setMtExcerpt(excerpt);
+        existenceDTO.setMtKeywords(keywords);
         return existenceDTO;
     }
 

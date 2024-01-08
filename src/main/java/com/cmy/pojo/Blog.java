@@ -47,6 +47,12 @@ public class Blog extends User{
      */
     private Boolean publish = false;
 
+    private String mtTextMore;
+
+    private String mtExcerpt;
+
+    private String mtKeywords;
+
 }
 
     

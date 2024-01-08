@@ -22,6 +22,7 @@ import java.nio.file.Paths;
 import java.nio.file.attribute.UserDefinedFileAttributeView;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -104,7 +105,11 @@ public class BlogHandler {
                 //存在->修改 有可能需要处理多媒体
                 if (exists){
                     String remoteName = existenceDTO.getRemoteName();
-                    UploadUtil.updateBlog(originFile,Collections.singletonList("[Markdown]"),markdownPostID,publish,remoteName);
+                    String mtTextMore = existenceDTO.getMtTextMore();
+                    String mtExcerpt = existenceDTO.getMtExcerpt();
+                    String mtKeywords = existenceDTO.getMtKeywords();
+                    List<String> categories = existenceDTO.getRemotecategoryList()==null||existenceDTO.getRemotecategoryList().isEmpty()?Collections.singletonList("[Markdown]"):existenceDTO.getRemotecategoryList();
+                    UploadUtil.updateBlog(originFile, categories,markdownPostID,publish,remoteName,mtTextMore,mtExcerpt,mtKeywords);
                     //将urlRecords 覆写
                     UrlRecordParseUtil.saveUrlRecords(urlRecordMapPath,uploadMap);
                     return;

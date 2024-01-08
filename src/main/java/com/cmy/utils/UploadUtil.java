@@ -92,7 +92,7 @@ public class UploadUtil {
      * @param publish        是否发布
      * @param remoteName
      */
-    public static void updateBlog(String originFile, List<String> categories, String markdownPostID, boolean publish, String remoteName) {
+    public static void updateBlog(String originFile, List<String> categories, String markdownPostID, boolean publish, String remoteName,String textMore,String excerpt,String keywords) {
         String fullPath = FilenameUtils.getFullPath(originFile);
         String fileName = FilenameUtils.getName(originFile);
         String markdown = FileUtil.readUtf8String(originFile);
@@ -109,6 +109,9 @@ public class UploadUtil {
         blog.setContent(updateMarkdown);
         blog.setCategories(categories);
         blog.setPublish(publish);
+        blog.setMtTextMore(textMore);
+        blog.setMtExcerpt(excerpt);
+        blog.setMtKeywords(keywords);
         Document blogUpdateResXml = MyXmlUtils.generateUpdateBlogXml(blog);
         String responseXml = HttpUtil.post(BlogHandler.user.getUrl(), MyXmlUtils.transferToXmlStr(blogUpdateResXml));
         XmlRes blogUploadedResXml = MyXmlUtils.getBlogUpdateResXml(responseXml);

@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 /**
  * @Author:Cmy
  * @Date:2024-01-05 16:10
@@ -18,6 +20,14 @@ public class ExistenceDTO {
     private Boolean exist = false;
 
     private String remoteName;
+
+    private List<String> remotecategoryList;
+
+    private String mtTextMore;
+
+    private String mtExcerpt;
+
+    private String mtKeywords;
 
 }
 
